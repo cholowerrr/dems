@@ -78,9 +78,9 @@ export default function CaseDetail() {
           <tbody>
             {evidence.map((ev) => (
               <tr key={ev.id}>
-                <td>{ev.description || <span className="muted">(none)</span>}</td>
-                <td>{ev.original_name || ev.filename || ev.file_name || ''}</td>
-                <td>{fmtSize(ev.size_bytes ?? ev.size)}</td>
+                <td><Link to={`/evidence/${ev.id}`}>{ev.description || ev.file_name || '(open)'}</Link></td>
+                <td>{ev.file_name || ''}</td>
+                <td>{fmtSize(ev.size_bytes)}</td>
                 <td className="mono" title={ev.sha256}>{ev.sha256 ? ev.sha256.slice(0, 16) + '…' : ''}</td>
                 <td>{ev.status}</td>
               </tr>

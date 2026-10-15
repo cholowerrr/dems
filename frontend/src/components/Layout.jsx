@@ -10,6 +10,8 @@ export default function Layout({ children }) {
         <Link to="/" className="brand">DEMS</Link>
         <nav>
           <Link to="/">Cases</Link>
+          {user.role === 'admin' && <Link to="/users">Users</Link>}
+          {user.role === 'admin' && <Link to="/audit">Audit log</Link>}
         </nav>
         <div className="spacer" />
         <span className="who">{user.username} <span className="badge">{user.role}</span></span>

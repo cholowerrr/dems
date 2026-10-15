@@ -1,3 +1,5 @@
+// All calls to the backend go through here. "/api" is forwarded to localhost:3000 by Vite.
+// Pass `body` as a plain object (sent as JSON) or `form` as FormData (file uploads).
 export async function api(path, { method = 'GET', body, form } = {}) {
   const res = await fetch('/api' + path, {
     method,

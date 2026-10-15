@@ -1,4 +1,5 @@
 require('dotenv').config();
+const usersRouter = require('./routes/users');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
@@ -58,6 +59,7 @@ app.use('/cases', casesRouter);
 app.use('/', evidenceRouter);
 app.use('/cases', reportsRouter);
 app.use('/audit', auditRouter);
+app.use('/users', usersRouter);
 
 // ---- TEST ROUTES (to prove the role checks work; we will remove these later) ----
 app.get('/test/admin-only', requireLogin, requireRole('admin'), (req, res) => {
