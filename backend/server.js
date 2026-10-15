@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken');
 const pool = require('./db');
 const { logAudit } = require('./audit');
 const { requireLogin, requireRole } = require('./middleware/auth');
+const casesRouter = require('./routes/cases');
+const evidenceRouter = require('./routes/evidence');
 
 const app = express();
 app.use(express.json());
@@ -49,12 +51,22 @@ app.get('/me', requireLogin, (req, res) => {
   res.json({ user: req.user });
 });
 
+// ---- CASES AND EVIDENCE ----
+app.use('/cases', casesRouter);
+app.use('/', evidenceRouter);
+
 // ---- TEST ROUTES (to prove the role checks work; we will remove these later) ----
 app.get('/test/admin-only', requireLogin, requireRole('admin'), (req, res) => {
   res.json({ message: 'Welcome, admin. Only admins can see this.' });
 });
 app.get('/test/investigator-only', requireLogin, requireRole('investigator'), (req, res) => {
   res.json({ message: 'Welcome, investigator.' });
+});
+
+// Catch-all for unexpected errors so the server does not crash
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: 'Something went wrong on the server' });
 });
 
 const PORT = process.env.PORT || 3000;
