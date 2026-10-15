@@ -9,6 +9,10 @@ export async function api(path, { method = 'GET', body, form } = {}) {
   });
   let data = null;
   try { data = await res.json(); } catch { /* no JSON body */ }
+  // Session ended (expired, or the account was disabled): go back to the login page.
+  if (res.status === 401 && path !== '/auth/login' && path !== '/me' && path !== '/auth/logout') {
+    window.location.href = '/login';
+  }
   if (!res.ok) {
     const err = new Error((data && (data.error || data.message)) || `Request failed (${res.status})`);
     err.status = res.status;

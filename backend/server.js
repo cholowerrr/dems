@@ -1,6 +1,7 @@
 require('dotenv').config();
-const usersRouter = require('./routes/users');
 const express = require('express');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -11,13 +12,26 @@ const casesRouter = require('./routes/cases');
 const reportsRouter = require('./routes/reports');
 const auditRouter = require('./routes/audit');
 const evidenceRouter = require('./routes/evidence');
+const usersRouter = require('./routes/users');
 
 const app = express();
+app.use(helmet());          // standard security headers
 app.use(express.json());
 app.use(cookieParser());
 
+// Slow down password guessing: 10 failed logins per 15 minutes per IP.
+// (Successful logins do not count against the limit.)
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  skipSuccessfulRequests: true,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many failed login attempts. Try again in 15 minutes.' },
+});
+
 // ---- LOGIN ----
-app.post('/auth/login', async (req, res) => {
+app.post('/auth/login', loginLimiter, async (req, res) => {
   const { username, password } = req.body || {};
   if (!username || !password) {
     return res.status(400).json({ error: 'Username and password are required' });
@@ -54,20 +68,23 @@ app.get('/me', requireLogin, (req, res) => {
   res.json({ user: req.user });
 });
 
-// ---- CASES AND EVIDENCE ----
+// ---- CASES, EVIDENCE, REPORTS, AUDIT, USERS ----
 app.use('/cases', casesRouter);
 app.use('/', evidenceRouter);
 app.use('/cases', reportsRouter);
 app.use('/audit', auditRouter);
 app.use('/users', usersRouter);
 
-// ---- TEST ROUTES (to prove the role checks work; we will remove these later) ----
-app.get('/test/admin-only', requireLogin, requireRole('admin'), (req, res) => {
-  res.json({ message: 'Welcome, admin. Only admins can see this.' });
-});
-app.get('/test/investigator-only', requireLogin, requireRole('investigator'), (req, res) => {
-  res.json({ message: 'Welcome, investigator.' });
-});
+// ---- TEST ROUTES (used only by test-auth.js) ----
+// Switched OFF automatically when NODE_ENV=production.
+if (process.env.NODE_ENV !== 'production') {
+  app.get('/test/admin-only', requireLogin, requireRole('admin'), (req, res) => {
+    res.json({ message: 'Welcome, admin. Only admins can see this.' });
+  });
+  app.get('/test/investigator-only', requireLogin, requireRole('investigator'), (req, res) => {
+    res.json({ message: 'Welcome, investigator.' });
+  });
+}
 
 // Catch-all for unexpected errors so the server does not crash
 app.use((err, req, res, next) => {

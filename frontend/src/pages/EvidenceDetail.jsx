@@ -72,6 +72,7 @@ export default function EvidenceDetail() {
       <h2>{ev.description || ev.file_name}</h2>
 
       <div className="card kv">
+        <div><span>Evidence ID</span><code className="mono">{ev.id}</code></div>
         <div><span>File</span>{ev.file_name} <span className="muted">({ev.mime_type})</span></div>
         <div><span>Size</span>{fmtSize(ev.size_bytes)}</div>
         <div><span>Status</span><b>{ev.status}</b></div>
