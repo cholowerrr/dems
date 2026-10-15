@@ -7,6 +7,8 @@ const pool = require('./db');
 const { logAudit } = require('./audit');
 const { requireLogin, requireRole } = require('./middleware/auth');
 const casesRouter = require('./routes/cases');
+const reportsRouter = require('./routes/reports');
+const auditRouter = require('./routes/audit');
 const evidenceRouter = require('./routes/evidence');
 
 const app = express();
@@ -54,6 +56,8 @@ app.get('/me', requireLogin, (req, res) => {
 // ---- CASES AND EVIDENCE ----
 app.use('/cases', casesRouter);
 app.use('/', evidenceRouter);
+app.use('/cases', reportsRouter);
+app.use('/audit', auditRouter);
 
 // ---- TEST ROUTES (to prove the role checks work; we will remove these later) ----
 app.get('/test/admin-only', requireLogin, requireRole('admin'), (req, res) => {
