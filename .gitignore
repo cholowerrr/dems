@@ -1,3 +1,4 @@
 node_modules
 .env
 backend/evidence_store
+backend/ledger_data
