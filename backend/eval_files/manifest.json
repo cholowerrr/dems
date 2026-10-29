@@ -1,0 +1,192 @@
+[
+  {
+    "no": 1,
+    "file": "CCTV_minimart_robbery_2026-09-03.mp4",
+    "kind": "video",
+    "title": "Minimart CCTV, armed robbery",
+    "scenario": "Robbery (RPC Art. 293): clip of a masked man at the counter",
+    "size_bytes": 2432719,
+    "doctored": "doctored/CCTV_minimart_robbery_2026-09-03.mp4",
+    "doctored_how": "Footage cut: 3.5 seconds removed from the middle"
+  },
+  {
+    "no": 2,
+    "file": "CCTV_ATM_skimming_2026-09-07.mp4",
+    "kind": "video",
+    "title": "ATM lobby CCTV",
+    "scenario": "Access device fraud (RA 8484): suspect fits a device on the ATM",
+    "size_bytes": 3173447,
+    "doctored": null
+  },
+  {
+    "no": 3,
+    "file": "CCTV_parking_carnapping_2026-09-09.mp4",
+    "kind": "video",
+    "title": "Parking lot CCTV",
+    "scenario": "Carnapping (RA 10883): vehicle driven out of a lot",
+    "size_bytes": 2830214,
+    "doctored": "doctored/CCTV_parking_carnapping_2026-09-09.mp4",
+    "doctored_how": "Timestamp overlay changed from 23:18 to 14:18"
+  },
+  {
+    "no": 4,
+    "file": "dashcam_hit_and_run_NBD4821.jpg",
+    "kind": "photo",
+    "title": "Dashcam photo, hit-and-run",
+    "scenario": "Reckless imprudence: fleeing white van, plate NBD 4821",
+    "size_bytes": 180010,
+    "doctored": "doctored/dashcam_hit_and_run_NBD4821.jpg",
+    "doctored_how": "Plate number altered (4821 to 4827)"
+  },
+  {
+    "no": 5,
+    "file": "checkpoint_photo_PQR3187.jpg",
+    "kind": "photo",
+    "title": "Checkpoint photo",
+    "scenario": "Warrantless arrest follow-up: vehicle stopped at checkpoint",
+    "size_bytes": 143267,
+    "doctored": null
+  },
+  {
+    "no": 6,
+    "file": "crime_scene_burglary_door.jpg",
+    "kind": "photo",
+    "title": "Crime scene photo, forced door",
+    "scenario": "Theft/robbery with force: forced door, pry bar, evidence markers",
+    "size_bytes": 177816,
+    "doctored": "doctored/crime_scene_burglary_door.jpg",
+    "doctored_how": "Pry bar and its marker painted out of the photo"
+  },
+  {
+    "no": 7,
+    "file": "screenshot_online_selling_scam.png",
+    "kind": "screenshot",
+    "title": "Chat screenshot, fake online seller",
+    "scenario": "Estafa / online fraud: seller stops replying after payment",
+    "size_bytes": 533815,
+    "doctored": null
+  },
+  {
+    "no": 8,
+    "file": "screenshot_ewallet_receipt_15000.png",
+    "kind": "screenshot",
+    "title": "E-wallet transfer receipt",
+    "scenario": "Estafa: proof of PHP 15,000 payment",
+    "size_bytes": 414814,
+    "doctored": "doctored/screenshot_ewallet_receipt_15000.png",
+    "doctored_how": "Amount edited from 15,000 to 1,500"
+  },
+  {
+    "no": 9,
+    "file": "inventory_seized_property_ACPO-2026-0412.pdf",
+    "kind": "pdf",
+    "title": "Inventory of seized property",
+    "scenario": "Theft / fencing: recovered items from a market stall",
+    "size_bytes": 3695,
+    "doctored": "doctored/inventory_seized_property_ACPO-2026-0412.pdf",
+    "doctored_how": "Item quantity changed (speakers 3 to 1)"
+  },
+  {
+    "no": 10,
+    "file": "medico_legal_certificate_MLC-2026-1187.pdf",
+    "kind": "pdf",
+    "title": "Medico-legal certificate",
+    "scenario": "Physical injuries: examination findings",
+    "size_bytes": 3233,
+    "doctored": null
+  },
+  {
+    "no": 11,
+    "file": "medico_legal_certificate_MLC-2026-1203.pdf",
+    "kind": "pdf",
+    "title": "Medico-legal certificate (2nd patient)",
+    "scenario": "Physical injuries (less serious): bar fight",
+    "size_bytes": 3229,
+    "doctored": null
+  },
+  {
+    "no": 12,
+    "file": "incident_record_2026-0455.pdf",
+    "kind": "pdf",
+    "title": "Incident record, snatching",
+    "scenario": "Robbery (snatching): motorcycle riders",
+    "size_bytes": 2952,
+    "doctored": "doctored/incident_record_2026-0455.pdf",
+    "doctored_how": "Plate number altered (1234 to 1284)"
+  },
+  {
+    "no": 13,
+    "file": "sinumpaang_salaysay_witness_A.docx",
+    "kind": "docx",
+    "title": "Sinumpaang salaysay (witness A)",
+    "scenario": "Witness statement for the hit-and-run",
+    "size_bytes": 37053,
+    "doctored": null
+  },
+  {
+    "no": 14,
+    "file": "sinumpaang_salaysay_witness_B.docx",
+    "kind": "docx",
+    "title": "Sinumpaang salaysay (witness B)",
+    "scenario": "Witness statement for the burglary",
+    "size_bytes": 37046,
+    "doctored": null
+  },
+  {
+    "no": 15,
+    "file": "bank_transfer_ledger_export.xlsx",
+    "kind": "xlsx",
+    "title": "Account activity export",
+    "scenario": "Estafa / cyber fraud: transfers to the receiving account",
+    "size_bytes": 7348,
+    "doctored": "doctored/bank_transfer_ledger_export.xlsx",
+    "doctored_how": "One transfer edited from 48,500 to 4,850"
+  },
+  {
+    "no": 16,
+    "file": "chat_export_online_threats.txt",
+    "kind": "text",
+    "title": "Chat export, online threats",
+    "scenario": "Grave threats via online messages (RA 10175 in relation to RPC Art. 282)",
+    "size_bytes": 700,
+    "doctored": "doctored/chat_export_online_threats.txt",
+    "doctored_how": "Threat message reworded"
+  },
+  {
+    "no": 17,
+    "file": "phone_call_recording_extortion.wav",
+    "kind": "audio",
+    "title": "Call recording, demand call",
+    "scenario": "Extortion call (synthetic stand-in audio)",
+    "size_bytes": 384044,
+    "doctored": "doctored/phone_call_recording_extortion.wav",
+    "doctored_how": "4 seconds of the recording removed"
+  },
+  {
+    "no": 18,
+    "file": "phone_call_recording_complainant.wav",
+    "kind": "audio",
+    "title": "Call recording, complainant",
+    "scenario": "Complainant call to the hotline (synthetic stand-in audio)",
+    "size_bytes": 288044,
+    "doctored": null
+  },
+  {
+    "no": 19,
+    "file": "crime_scene_burglary_room2.jpg",
+    "kind": "photo",
+    "title": "Crime scene photo, second room",
+    "scenario": "Burglary: second view of the scene",
+    "size_bytes": 176514,
+    "doctored": null
+  },
+  {
+    "no": 20,
+    "file": "CCTV_minimart_robbery_cam3_2026-09-03.mp4",
+    "kind": "video",
+    "title": "Minimart CCTV, second camera",
+    "scenario": "Robbery: same incident, entrance camera",
+    "size_bytes": 2431876,
+    "doctored": null
+  }
+]

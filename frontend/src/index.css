@@ -287,3 +287,11 @@ td.actions { white-space: nowrap; }
 .grid2 > .panel + .panel { margin-top: 0; }
 .main { min-width: 0; }
 .dash-grid > *, .stats > * { min-width: 0; }
+
+/* ---------- verify all + coverage line ---------- */
+.coverage { margin: 0 0 .9rem; font-size: .98rem; }
+.coverage .good { color: var(--ok); } .coverage .bad { color: var(--seal); }
+.verifyall__sum { margin: .9rem 0 .6rem; font-weight: 600; }
+.verifyall__sum.good { color: var(--ok); } .verifyall__sum.bad { color: var(--seal); }
+.verifyall td:nth-child(2) { white-space: nowrap; }
+.checks .bad b { color: var(--seal); } .checks > div:not(.good):not(.bad) b { color: var(--text); }

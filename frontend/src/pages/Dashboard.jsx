@@ -4,6 +4,7 @@ import { api } from '../api.js';
 import { useAuth } from '../auth.jsx';
 import { EVENT_ICON, EVENT_LABEL } from '../components/Badge.jsx';
 import { Icon } from '../components/Icons.jsx';
+import VerifyAll from '../components/VerifyAll.jsx';
 
 const fmt = (d) => new Date(d).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
 
@@ -27,7 +28,22 @@ export default function Dashboard() {
   const [s, setS] = useState(null);
   const [error, setError] = useState('');
 
-  useEffect(() => { api('/stats').then(setS).catch((e) => setError(e.message)); }, []);
+  const reload = () => api('/stats').then(setS).catch((e) => setError(e.message));
+  useEffect(() => { reload(); }, []);
+
+  // every evidence item in every case this user can see
+  async function allItems() {
+    const list = await api('/cases');
+    const cases = Array.isArray(list) ? list : list.cases || [];
+    const out = [];
+    for (const c of cases) {
+      const d = await api(`/cases/${c.id}`);
+      for (const ev of (d.evidence || (d.case && d.case.evidence) || [])) {
+        out.push({ id: ev.id, name: ev.description || ev.file_name, case_number: c.case_number });
+      }
+    }
+    return out;
+  }
 
   const hour = new Date().getHours();
   const greet = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
@@ -146,11 +162,15 @@ export default function Dashboard() {
               </section>
 
               <section className="panel">
-                <div className="panel__title"><h3>Integrity checks, last 30 days</h3></div>
+                <div className="panel__title"><h3>Integrity status</h3></div>
                 <div className="checks">
-                  <div className="good"><b>{s.checks_30d.passed}</b><span className="muted">passed</span></div>
-                  <div className="bad"><b>{s.checks_30d.failed}</b><span className="muted">failed</span></div>
+                  <div className="good"><b>{s.items_verified}</b><span className="muted">verified</span></div>
+                  <div className={s.flagged.length ? 'bad' : ''}><b>{s.flagged.length}</b><span className="muted">flagged</span></div>
+                  <div><b>{s.items_not_checked}</b><span className="muted">not yet checked</span></div>
                 </div>
+                <p className="muted" style={{ marginTop: '.8rem', fontSize: '.86rem' }}>
+                  Each evidence item counts once, based on its latest check. {s.checks_30d.passed + s.checks_30d.failed} checks were run in the last 30 days.
+                </p>
                 {s.flagged.length === 0 ? (
                   <p className="muted" style={{ marginTop: '.9rem' }}>No item is currently flagged. The latest check on every verified item passed.</p>
                 ) : (
@@ -163,6 +183,9 @@ export default function Dashboard() {
                       </span>
                     </Link>
                   ))
+                )}
+                {(user.role === 'investigator' || user.role === 'custodian') && s.evidence_total > 0 && (
+                  <div style={{ marginTop: '1rem' }}><VerifyAll loadItems={allItems} onDone={reload} /></div>
                 )}
               </section>
             </div>

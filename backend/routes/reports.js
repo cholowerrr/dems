@@ -133,18 +133,22 @@ router.get('/:id/report.pdf', async (req, res) => {
   ev.forEach((e, idx) => {
     need(190);
     const st = STATUS[e.status] || [e.status, C.grey];
-    // title row
-    doc.roundedRect(M, y, CW, 44, 6).fill(C.manila);
-    doc.roundedRect(M, y, CW, 44, 6).lineWidth(0.8).stroke(C.manilaLine);
-    doc.circle(M + 17, y + 22, 5.5).lineWidth(2).stroke(C.manilaLine);
-    text(`${idx + 1}.  ${e.description || e.file_name}`, M + 34, y + 8, { size: 12, font: 'Helvetica-Bold', color: '#2a2415', width: CW - 170 });
-    text(e.file_name, M + 34, y + 26, { size: 8.5, color: '#6b5d38', width: CW - 170 });
+    // title row: the card grows when the description needs two or more lines, so the file name never overlaps it
+    const title = `${idx + 1}.  ${e.description || e.file_name}`;
+    const tw = CW - 170;
+    const th = doc.font('Helvetica-Bold').fontSize(12).heightOfString(title, { width: tw });
+    const cardH = Math.max(44, 8 + th + 4 + 12 + 8);
+    doc.roundedRect(M, y, CW, cardH, 6).fill(C.manila);
+    doc.roundedRect(M, y, CW, cardH, 6).lineWidth(0.8).stroke(C.manilaLine);
+    doc.circle(M + 17, y + cardH / 2, 5.5).lineWidth(2).stroke(C.manilaLine);
+    text(title, M + 34, y + 8, { size: 12, font: 'Helvetica-Bold', color: '#2a2415', width: tw, lineBreak: true });
+    text(e.file_name, M + 34, y + 8 + th + 4, { size: 8.5, color: '#6b5d38', width: tw, lineBreak: false, ellipsis: true });
     pill(st[0], st[1], M + CW - 12 - (doc.font('Helvetica-Bold').fontSize(8).widthOfString(st[0]) + 14), y + 8);
     const lv = latest[e.id];
     const vl = lv ? (lv.event_type === 'verified' ? 'Verified' : 'FAILED check') : 'Not yet checked';
     const vc = lv ? (lv.event_type === 'verified' ? C.good : C.bad) : C.grey;
     pill(vl, vc, M + CW - 12 - (doc.font('Helvetica-Bold').fontSize(8).widthOfString(vl) + 14), y + 25);
-    y += 56;
+    y += cardH + 12;
 
     // details (two columns)
     const rows = [

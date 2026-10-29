@@ -9,3 +9,10 @@ backend/station_credentials.csv
 backend/tamper.js 
 backend/eval_results 
 backend/station_credentials.csv 
+
+backend/.env
+backend/station_credentials.csv
+backend/evidence_store/
+backend/eval_results/
+node_modules/
+frontend/dist/

@@ -101,6 +101,9 @@ router.get('/', async (req, res) => {
     evidence_by_status: status,
     checks_30d: { passed: check.verified, failed: check.verification_failed },
     flagged: latestChecks.rows.filter((r) => r.event_type === 'verification_failed'),
+    // how many items currently stand verified / have never been checked
+    items_verified: latestChecks.rows.filter((r) => r.event_type === 'verified').length,
+    items_not_checked: Math.max(0, status.in_custody + status.transferred + status.released - latestChecks.rows.length),
     recent: recent.rows,
   });
 });

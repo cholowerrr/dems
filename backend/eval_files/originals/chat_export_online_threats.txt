@@ -1,0 +1,12 @@
+Chat export  |  conversation with "Jayson (new acct)"  |  exported 2026-09-18 10:02
+
+[2026-09-16 21:14] Jayson: Alam ko kung saan ka nagtatrabaho. Magbayad ka na bago pa lumala.
+[2026-09-16 21:15] You: Sino ka? Anong bayad?
+[2026-09-16 21:15] Jayson: Yung utang mo. 20k hanggang Biyernes o ipo-post ko yung mga picture mo.
+[2026-09-16 21:17] You: Wala akong utang sa iyo. Titigil ka na.
+[2026-09-17 08:41] Jayson: Last warning. Ipapahiya kita sa buong office mo.
+[2026-09-17 08:44] You: Magre-report ako sa pulis.
+[2026-09-17 08:44] Jayson: Sige, subukan mo. Hindi mo ako mahahanap.
+
+--- end of export ---
+Fictional test data created for the DEMS capstone (Holy Angel University). Not a real record.

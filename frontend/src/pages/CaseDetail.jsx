@@ -4,6 +4,7 @@ import { api } from '../api.js';
 import { useAuth } from '../auth.jsx';
 import Badge from '../components/Badge.jsx';
 import { Icon } from '../components/Icons.jsx';
+import VerifyAll from '../components/VerifyAll.jsx';
 
 const fmtSize = (n) => (n == null ? '' : n < 1024 ? `${n} B` : n < 1048576 ? `${(n / 1024).toFixed(1)} KB` : `${(n / 1048576).toFixed(1)} MB`);
 
@@ -141,6 +142,18 @@ export default function CaseDetail() {
             </button>
           </div>
         </form>
+      )}
+
+      {(user.role === 'investigator' || user.role === 'custodian') && evidence.length > 0 && (
+        <section className="panel" style={{ marginBottom: '1.3rem' }}>
+          <h3 style={{ margin: '0 0 .6rem' }}>Check this case</h3>
+          <p className="muted" style={{ marginTop: 0 }}>Re-checks every file in this case against the database and the blockchain. Each check is saved in the custody timeline.</p>
+          <VerifyAll
+            label={`Verify all ${evidence.length} item${evidence.length === 1 ? '' : 's'} in this case`}
+            loadItems={async () => evidence.map((ev) => ({ id: ev.id, name: ev.description || ev.file_name, case_number: c.case_number }))}
+            onDone={load}
+          />
+        </section>
       )}
 
       <h3 style={{ margin: '0 0 .7rem' }}>Evidence in this case</h3>
