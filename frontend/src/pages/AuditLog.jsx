@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api.js';
+import { Icon } from '../components/Icons.jsx';
 
 const PAGE = 50;
 
@@ -21,43 +22,50 @@ export default function AuditLog() {
 
   return (
     <>
-      <h2>Audit log</h2>
-      <p className="muted">System-wide activity: logins, access denials, user changes and report downloads. (Per-evidence history is in each custody timeline.)</p>
-      <div className="row" style={{ marginBottom: '1rem' }}>
+      <div className="page__head">
+        <div>
+          <h2>Audit log</h2>
+          <p>Logins, access denials, user changes and report downloads. Each evidence item's own history is in its custody timeline.</p>
+        </div>
+      </div>
+      <div className="row" style={{ marginBottom: '1rem', alignItems: 'flex-end' }}>
         <label>Action
           <input value={action} onChange={(e) => { setOffset(0); setAction(e.target.value.toUpperCase()); }} placeholder="e.g. LOGIN_FAILED" />
         </label>
         <label>Result
           <select value={success} onChange={(e) => { setOffset(0); setSuccess(e.target.value); }}>
             <option value="">All</option>
-            <option value="true">Success</option>
+            <option value="true">Succeeded</option>
             <option value="false">Failed</option>
           </select>
         </label>
       </div>
-      {error && <div className="error">{error}</div>}
+      {error && <div className="notice notice--error">{error}</div>}
       {data && (
         <>
-          <table className="card">
-            <thead><tr><th>Time</th><th>User</th><th>Action</th><th>Target</th><th>IP</th><th>Result</th><th>Detail</th></tr></thead>
-            <tbody>
-              {data.rows.map((r) => (
-                <tr key={r.id}>
-                  <td>{new Date(r.created_at).toLocaleString()}</td>
-                  <td>{r.username || r.user_id || '—'}</td>
-                  <td className="mono">{r.action}</td>
-                  <td>{r.target_type ? `${r.target_type} ${r.target_id ?? ''}` : ''}</td>
-                  <td className="mono">{r.ip}</td>
-                  <td>{r.success ? '✔' : <span className="bad-text">✘</span>}</td>
-                  <td>{r.detail}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="table-wrap">
+            <table>
+              <thead><tr><th>Time</th><th>User</th><th>Action</th><th>Target</th><th>IP</th><th>Result</th><th>Detail</th></tr></thead>
+              <tbody>
+                {data.rows.map((r) => (
+                  <tr key={r.id}>
+                    <td>{new Date(r.created_at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</td>
+                    <td>{r.username || r.user_id || 'None'}</td>
+                    <td className="mono">{r.action}</td>
+                    <td>{r.target_type ? `${r.target_type} ${r.target_id ?? ''}` : ''}</td>
+                    <td className="mono">{r.ip}</td>
+                    <td>{r.success ? <span className="badge badge--green">OK</span> : <span className="badge badge--red">Failed</span>}</td>
+                    <td>{r.detail}</td>
+                  </tr>
+                ))}
+                {data.rows.length === 0 && <tr><td colSpan="7" className="empty">No entries match.</td></tr>}
+              </tbody>
+            </table>
+          </div>
           <div className="row" style={{ marginTop: '1rem' }}>
-            <button className="btn ghost dark" disabled={offset === 0} onClick={() => setOffset(Math.max(0, offset - PAGE))}>← Newer</button>
+            <button className="btn btn--light btn--small" disabled={offset === 0} onClick={() => setOffset(Math.max(0, offset - PAGE))}>Newer</button>
             <span className="muted">{total === 0 ? 0 : offset + 1}–{Math.min(offset + PAGE, total)} of {total}</span>
-            <button className="btn ghost dark" disabled={offset + PAGE >= total} onClick={() => setOffset(offset + PAGE)}>Older →</button>
+            <button className="btn btn--light btn--small" disabled={offset + PAGE >= total} onClick={() => setOffset(offset + PAGE)}>Older</button>
           </div>
         </>
       )}

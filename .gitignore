@@ -2,4 +2,4 @@ node_modules
 .env
 backend/evidence_store
 backend/ledger_data
-backend/fabric_identity
+backend/fabric_identitybackend/tamper.js 

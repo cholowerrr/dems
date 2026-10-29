@@ -9,7 +9,7 @@ export async function api(path, { method = 'GET', body, form } = {}) {
   });
   let data = null;
   try { data = await res.json(); } catch { /* no JSON body */ }
-  // Session ended (expired, or the account was disabled): go back to the login page.
+  // Session ended (expired, or the account was disabled): go back to the sign-in page.
   if (res.status === 401 && path !== '/auth/login' && path !== '/me' && path !== '/auth/logout') {
     window.location.href = '/login';
   }
