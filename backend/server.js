@@ -14,13 +14,14 @@ const auditRouter = require('./routes/audit');
 const evidenceRouter = require('./routes/evidence');
 const usersRouter = require('./routes/users');
 const statsRouter = require('./routes/stats');
-
+const viewersRouter = require('./routes/viewers');
 
 const app = express();
 app.use(helmet());          // standard security headers
 app.use(express.json());
 app.use(cookieParser());
 app.use('/stats', statsRouter);
+app.use('/cases', viewersRouter);
 
 // Slow down password guessing: 10 failed logins per 15 minutes per IP.
 // (Successful logins do not count against the limit.)

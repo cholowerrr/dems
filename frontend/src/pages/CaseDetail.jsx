@@ -19,6 +19,33 @@ export default function CaseDetail() {
   const [busy, setBusy] = useState(false);
   const fileInput = useRef(null);
 
+  const canManage = user.role === 'admin' || user.role === 'investigator';
+  const [viewers, setViewers] = useState([]);
+  const [allViewers, setAllViewers] = useState([]);
+  const [pick, setPick] = useState('');
+  const [vError, setVError] = useState('');
+
+  function loadViewers() {
+    if (!canManage) return;
+    api(`/cases/${id}/viewers`).then(setViewers).catch(() => setViewers([]));
+  }
+  useEffect(() => {
+    if (!canManage) return;
+    loadViewers();
+    api('/users/lookup?role=viewer').then(setAllViewers).catch(() => setAllViewers([]));
+  }, [id, canManage]);
+
+  async function addViewer(e) {
+    e.preventDefault(); setVError('');
+    try { await api(`/cases/${id}/viewers`, { method: 'POST', body: { user_id: Number(pick) } }); setPick(''); loadViewers(); }
+    catch (err) { setVError(err.message); }
+  }
+  async function removeViewer(uid) {
+    setVError('');
+    try { await api(`/cases/${id}/viewers/${uid}`, { method: 'DELETE' }); loadViewers(); }
+    catch (err) { setVError(err.message); }
+  }
+
   function load() { api(`/cases/${id}`).then(setData).catch((e) => setError(e.message)); }
   useEffect(load, [id]);
 
@@ -65,6 +92,34 @@ export default function CaseDetail() {
         <span>Status <Badge kind="case" value={c.status} /></span>
         <span>Evidence items <b>{evidence.length}</b></span>
       </div>
+
+      {canManage && (
+        <section className="panel stack" style={{ marginBottom: '1.3rem' }}>
+          <h3>Who can view this case</h3>
+          <p className="muted">Viewers see only the cases listed for them here, and can only read.</p>
+          {viewers.length === 0 ? <p className="muted">No viewer has access yet.</p> : (
+            <ul className="feed">
+              {viewers.map((v) => (
+                <li key={v.id}>
+                  <span className="dot"><Icon name="eye" size={15} /></span>
+                  <span><b>{v.full_name}</b><small>{v.username}</small></span>
+                  <button type="button" className="btn btn--light btn--small" style={{ marginLeft: 'auto' }} onClick={() => removeViewer(v.id)}>Remove access</button>
+                </li>
+              ))}
+            </ul>
+          )}
+          <form className="row" onSubmit={addViewer}>
+            <select value={pick} onChange={(e) => setPick(e.target.value)} required aria-label="Viewer to add">
+              <option value="">Choose a viewer</option>
+              {allViewers.filter((a) => !viewers.some((v) => v.id === a.id)).map((a) => (
+                <option key={a.id} value={a.id}>{a.full_name} ({a.username})</option>
+              ))}
+            </select>
+            <button className="btn" disabled={!pick}>Give access</button>
+          </form>
+          {vError && <div className="notice notice--error">{vError}</div>}
+        </section>
+      )}
 
       {user.role === 'investigator' && (
         <form className="panel stack" onSubmit={upload} style={{ marginBottom: '1.3rem' }}>
