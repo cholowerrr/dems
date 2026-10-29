@@ -1,0 +1,13 @@
+{
+  "note": "Fictional sample roster for the ACPO demo. Edit the names, usernames and roles, then run: node create-station-accounts.js",
+  "accounts": [
+    { "username": "msantos",    "full_name": "PSSg Maria L. Santos",        "role": "admin",        "post": "Station Administrative and IT Officer" },
+    { "username": "jreyes",     "full_name": "PCpl Jose M. Reyes",          "role": "investigator", "post": "Investigator-on-Case, Theft and Robbery" },
+    { "username": "adelacruz",  "full_name": "PCpl Ana B. Dela Cruz",       "role": "investigator", "post": "Investigator-on-Case, Cybercrime Desk" },
+    { "username": "mgarcia",    "full_name": "PSSg Miguel R. Garcia",       "role": "investigator", "post": "Investigator-on-Case, Crimes Against Persons" },
+    { "username": "cmendoza",   "full_name": "Pat Carlo D. Mendoza",        "role": "custodian",    "post": "Evidence Custodian" },
+    { "username": "lvillanueva","full_name": "PCpl Liza P. Villanueva",     "role": "custodian",    "post": "Evidence Custodian (alternate)" },
+    { "username": "rbautista",  "full_name": "PCpt Ramon T. Bautista",      "role": "viewer",       "post": "Deputy Station Commander" },
+    { "username": "eaquino",    "full_name": "Atty. Elena S. Aquino",       "role": "viewer",       "post": "City Prosecutor's Office liaison" }
+  ]
+}
