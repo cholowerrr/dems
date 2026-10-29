@@ -4,6 +4,7 @@ import { api } from '../api.js';
 import { useAuth } from '../auth.jsx';
 import Badge, { EVENT_ICON, EVENT_LABEL } from '../components/Badge.jsx';
 import { Icon } from '../components/Icons.jsx';
+import FileViewer from '../components/FileViewer.jsx';
 
 const fmtSize = (n) => (n == null ? '' : n < 1024 ? `${n} B` : n < 1048576 ? `${(n / 1024).toFixed(1)} KB` : `${(n / 1048576).toFixed(1)} MB`);
 const fmtDate = (d) => (d ? new Date(d).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : '');
@@ -63,6 +64,9 @@ export default function EvidenceDetail() {
   const isInv = user.role === 'investigator';
   const isCust = user.role === 'custodian';
   const canAct = isInv || isCust;
+  const iHoldIt = ev.current_custodian_id === user.id;
+  const canTransfer = ev.status === 'in_custody' && (isCust || (isInv && iHoldIt));
+  const canRelease = ev.status === 'in_custody' && isCust;
   const custodians = people.filter((p) => p.role === 'custodian' && p.id !== user.id);
   const good = result && result.result === 'VERIFIED';
 
@@ -94,6 +98,8 @@ export default function EvidenceDetail() {
         </dl>
       </section>
 
+      <FileViewer evidence={ev} onAccessed={load} />
+
       {canAct && (
         <section className="panel stack" style={{ marginBottom: '1.2rem' }}>
           <h3>Integrity check</h3>
@@ -122,10 +128,16 @@ export default function EvidenceDetail() {
       {actionError && <div className="notice notice--error" style={{ marginBottom: '1rem' }}>{actionError}</div>}
       {msg && <div className="notice notice--ok" style={{ marginBottom: '1rem' }}>{msg}</div>}
 
-      {canAct && ev.status === 'in_custody' && (
-        <div className="grid2" style={{ marginBottom: '1.2rem' }}>
-          <form className="panel stack" onSubmit={(e) => { e.preventDefault(); act('transfer', `/evidence/${id}/transfer`, { to_user_id: Number(toUser), note: transferNote }); setToUser(''); setTransferNote(''); }}>
-            <h3>Transfer to another custodian</h3>
+      {isInv && ev.status === 'in_custody' && !iHoldIt && (
+        <div className="notice" style={{ marginBottom: '1.2rem', background: 'var(--manila-soft)' }}>
+          This item is held by {nameOf(ev.current_custodian_id)}. Only the custodian holding it can transfer or release it.
+        </div>
+      )}
+
+      {(canTransfer || canRelease) && (
+        <div className="grid2" style={{ marginBottom: '1.2rem', gridTemplateColumns: canTransfer && canRelease ? undefined : '1fr' }}>
+          {canTransfer && <form className="panel stack" onSubmit={(e) => { e.preventDefault(); act('transfer', `/evidence/${id}/transfer`, { to_user_id: Number(toUser), note: transferNote }); setToUser(''); setTransferNote(''); }}>
+            <h3>{isInv ? 'Hand over to a custodian' : 'Transfer to another custodian'}</h3>
             <label>Custodian
               <select value={toUser} onChange={(e) => setToUser(e.target.value)} required>
                 <option value="">Choose a custodian</option>
@@ -135,10 +147,10 @@ export default function EvidenceDetail() {
             <label>Note
               <input value={transferNote} onChange={(e) => setTransferNote(e.target.value)} placeholder="Reason or remarks" />
             </label>
-            <div><button className="btn" disabled={!!busy || !toUser}><Icon name="send" size={16} />{busy === 'transfer' ? 'Sending…' : 'Transfer'}</button></div>
-          </form>
+            <div><button className="btn" disabled={!!busy || !toUser}><Icon name="send" size={16} />{busy === 'transfer' ? 'Sending…' : isInv ? 'Hand over' : 'Transfer'}</button></div>
+          </form>}
 
-          <form className="panel stack" onSubmit={(e) => { e.preventDefault(); act('release', `/evidence/${id}/release`, { to_office: toOffice, note: releaseNote }); setToOffice(''); setReleaseNote(''); }}>
+          {canRelease && <form className="panel stack" onSubmit={(e) => { e.preventDefault(); act('release', `/evidence/${id}/release`, { to_office: toOffice, note: releaseNote }); setToOffice(''); setReleaseNote(''); }}>
             <h3>Release to an office</h3>
             <label>Receiving office
               <input value={toOffice} onChange={(e) => setToOffice(e.target.value)} placeholder="e.g. City Prosecutor's Office" required />
@@ -147,7 +159,7 @@ export default function EvidenceDetail() {
               <input value={releaseNote} onChange={(e) => setReleaseNote(e.target.value)} placeholder="Reference or remarks" />
             </label>
             <div><button className="btn btn--manila" disabled={!!busy || !toOffice}>{busy === 'release' ? 'Releasing…' : 'Release evidence'}</button></div>
-          </form>
+          </form>}
         </div>
       )}
 
